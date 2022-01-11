@@ -52,6 +52,7 @@ engine:
       - text: java-func-accelerator
         with: "#artifactId"
   - include: [ "config/*.yaml" ]
+    condition: "#deploymentType == 'workload'"
     chain:
     - type: ReplaceText
       substitutions:

@@ -9,5 +9,5 @@ pack(SOURCE_IMAGE + ':latest',
     ],
 )
 
-k8s_yaml(['knaative/service.yaml'])
+k8s_yaml(['kubernetes/deployment.yaml', 'kubernetes/service.yaml'])
 k8s_resource('java-func-accelerator', port_forwards=8080)

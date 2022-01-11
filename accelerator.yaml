@@ -9,7 +9,7 @@ accelerator:
   - name: registry
     inputType: text
     label: The registry path for the generated image
-    defaultValue: your-registry.io/project
+    defaultValue: your-registry.io/library
     required: true
   - name: gitRepository
     inputType: text
@@ -63,7 +63,7 @@ engine:
         with: "#artifactId"
     - type: ReplaceText
       substitutions:
-      - text: your-registry.io/tap
+      - text: your-registry.io/library
         with: "#registry"
   - include: [ "README.md" ]
     chain:
@@ -89,7 +89,7 @@ engine:
         with: "#artifactId"
     - type: ReplaceText
       substitutions:
-      - text: your-registry.io/tap
+      - text: your-registry.io/library
         with: "#registry"
     - type: RewritePath
       rewriteTo: "#filename"
@@ -103,6 +103,19 @@ engine:
           with: "#artifactId"
       - type: RewritePath
         rewriteTo: "'kubernetes/' + #filename"
+      - include: [ "kubernetes/k8s/Tiltfile" ]
+        condition: "#deploymentType == 'workload' and !#enableAppLiveView"
+        chain:
+        - type: ReplaceText
+          substitutions:
+          - text: java-func-accelerator
+            with: "#artifactId"
+        - type: ReplaceText
+          substitutions:
+          - text: your-registry.io/library
+            with: "#registry"
+        - type: RewritePath
+          rewriteTo: "#filename"
     - include: [ "kubernetes/cnr/service-alv.yaml" ]
       condition: "#deploymentType == 'workload' and #enableAppLiveView"
       chain:
@@ -112,6 +125,19 @@ engine:
           with: "#artifactId"
       - type: RewritePath
         rewriteTo: "'kubernetes/service.yaml'"
+    - include: [ "kubernetes/k8s/Tiltfile" ]
+      condition: "#deploymentType == 'workload' and #enableAppLiveView"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: java-func-accelerator
+          with: "#artifactId"
+      - type: ReplaceText
+        substitutions:
+        - text: your-registry.io/library
+          with: "#registry"
+      - type: RewritePath
+        rewriteTo: "#filename"
     - include: [ "kubernetes/cnr/application.properties" ]
       condition: "#deploymentType == 'workload' and #enableAppLiveView"
       chain:

@@ -1,7 +1,6 @@
-# New Accelerator
+# New Java Function Accelerator
 
-- [new-accelerator.yaml](new-accelerator.yaml)  
-  Rename this file to `accelerator.yaml` and include it inside your new accelerator repo.
+Use this accelerator for a quick access to a workload implemented through a java funtion  that comes configured in two flavors:
 
-- [k8s-resource.yaml](k8s-resource.yaml)  
-  Apply this to the Kubernetes cluster where your instance of Accelerator was deployed.
+- for a local cluster directly in k8s leveraging quick loop with build through pack and direct deployment on changes.
+- for a shared Tap-enabled cluster directly on cnr using Tanzu Build Service, Live Updates, Live View and pipelines orchestration through Choreographer.

@@ -1,0 +1,26 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: java-func-accelerator
+spec:
+  template:
+    spec:
+      containers:
+        - image: java-func-accelerator
+          env:
+            - name: RAPIDAPI_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rapidapi-key-host
+                  key: host
+            - name: RAPIDAPI_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rapidapi-key-host
+                  key: key
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness

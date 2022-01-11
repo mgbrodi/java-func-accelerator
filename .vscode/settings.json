@@ -1,0 +1,4 @@
+{
+    "java.server.launchMode": "Standard",
+    "java.configuration.updateBuildConfiguration": "automatic"
+}

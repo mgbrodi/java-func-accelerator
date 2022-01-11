@@ -1,0 +1,9 @@
+apiVersion: accelerator.apps.tanzu.vmware.com/v1alpha1
+kind: Accelerator
+metadata:
+  name: java-func-accelerator
+spec:
+  git:
+    url: https://github.com/mgbrodi/java-func-accelerator
+    ref:
+      branch: main

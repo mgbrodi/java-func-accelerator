@@ -1,0 +1,45 @@
+apiVersion: skaffold/v2beta15
+kind: Config
+metadata:
+  name: java-func-accelerator
+build:
+  artifacts:
+  - image: java-func-accelerator
+    custom:
+      buildCommand: |-
+        java/mvnw spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=$IMAGE
+        if [ $PUSH_IMAGE ]; then
+          docker push $IMAGE
+        fi
+      dependencies:
+        paths:
+          - src
+          - pom.xml
+  tagPolicy:
+    sha256: {}
+  local:
+    push: true
+deploy:
+  kubectl:
+    manifests:
+    - kubernetes/service.yaml
+
+profiles:
+- name: native
+  build:
+    artifacts:
+    - image: java-func-accelerator
+      custom:
+        buildCommand: |-
+          java/mvnw spring-boot:build-image -Pnative-buildpack -DskipTests -Dspring-boot.build-image.imageName=$IMAGE
+          if [ $PUSH_IMAGE ]; then
+            docker push $IMAGE
+          fi
+        dependencies:
+          paths:
+            - src
+            - pom.xml
+    tagPolicy:
+      sha256: {}
+    local:
+      push: true

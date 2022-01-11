@@ -1,0 +1,12 @@
+# [[ build.env ]]
+#   name = 'BP_MAVEN_BUILD_ARGUMENTS'
+#   value = '-Dtest=Demo_Toxiproxy_Tst test package'
+[[ build.env ]]
+  name = 'BP_LIVE_RELOAD_ENABLED'
+  value = 'true'
+[[build.buildpacks]]
+uri = "harbor.marygabry.name/tap/build-service:clusterbuilder-default"
+[stack]
+  id = "io.buildpacks.stacks.bionic"
+  build-image = "harbor.marygabry.name/tap/build-service:build"
+  run-image = "harbor.marygabry.name/tap/build-service:run"

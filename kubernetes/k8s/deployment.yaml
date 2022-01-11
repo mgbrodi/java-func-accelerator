@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: java-func-accelerator
+  name: java-func-accelerator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: java-func-accelerator
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: java-func-accelerator
+        app.kubernetes.io/part-of: java-func-accelerator
+    spec:
+      containers:
+      - image: java-func-accelerator:latest
+        env:
+          - name: RAPIDAPI_HOST
+            valueFrom:
+              secretKeyRef:
+                name: rapidapi-key-host
+                key: host
+          - name: RAPIDAPI_KEY
+            valueFrom:
+              secretKeyRef:
+                name: rapidapi-key-host
+                key: key
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+        name: app
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080

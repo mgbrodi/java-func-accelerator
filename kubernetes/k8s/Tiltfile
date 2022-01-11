@@ -1,0 +1,13 @@
+SOURCE_IMAGE = os.getenv("SOURCE_IMAGE", default='your-registry.io/tap/java-func-accelerator')
+
+load('ext://pack', 'pack')
+
+pack(SOURCE_IMAGE + ':latest',
+    deps=['./java/bin/main'],
+    live_update = [
+        sync('./java/bin/main', '/workspace/BOOT-INF/classes'),
+    ],
+)
+
+k8s_yaml(['knaative/service.yaml'])
+k8s_resource('java-func-accelerator', port_forwards=8080)

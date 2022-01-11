@@ -1,0 +1,19 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: java-func-accelerator
+spec:
+  template:
+    metadata:
+      labels:
+        tanzu.app.live.view: "true"
+        tanzu.app.live.view.application.name: java-func-accelerator
+    spec:
+      containers:
+        - image: java-func-accelerator
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness

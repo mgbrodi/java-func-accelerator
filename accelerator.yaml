@@ -1,0 +1,128 @@
+accelerator:
+  displayName: java-func-accelerator
+  description: This accelerator is used to help upgrade an existing java function to use TAP
+  iconUrl: https://hackernoon.com/hn-images/1*KLO-1UMtj6I6YlsRi1ZLXQ.png
+  tags:
+  - java
+  - function
+  options:
+  - name: registry
+    inputType: text
+    label: The registry path for the generated image
+    defaultValue: your-registry.io/project
+    required: true
+  - name: gitRepository
+    inputType: text
+    label: Git Repository for source code 
+    defaultValue: https://github.com/mgbrodi/java-func-accelerator
+    required: true
+  - name: deploymentType
+    inputType: select
+    choices:
+    - value: workload
+      text: TAP workload
+    - value: local-k8s
+      text: Kubernetes deployment and service
+    defaultValue: workload
+    required: true
+  - name: enableAppLiveView
+    label: App Live View
+    dependsOn:
+      name: deploymentType
+      value: workload
+    description: Toggle "On" to enable Application Live View integration.
+    inputType: checkbox
+    dataType: boolean
+    defaultValue: false
+
+engine:
+  merge:
+  - include: [ "**/*" ]
+    exclude: [ "k8s-resource.yaml","config/*.yaml", "README.md", "catalog/*.yaml", "kubernetes/**", "java/pom.xml", "java/README.md" ]
+  - include: [ "java/pom.xml" ]
+    chain:
+    - type: ReplaceText
+      substitutions:
+      - text: java-func-accelerator
+        with: "#artifactId"
+  - include: [ "java/README.md" ]
+    chain:
+    - type: ReplaceText
+      substitutions:
+      - text: java-func-accelerator
+        with: "#artifactId"
+  - include: [ "config/*.yaml" ]
+    chain:
+    - type: ReplaceText
+      substitutions:
+      - text: https://github.com
+        with: "#gitRepository"
+    - type: ReplaceText
+      substitutions:
+      - text: java-func-accelerator
+        with: "#artifactId"
+    - type: ReplaceText
+      substitutions:
+      - text: your-registry.io/tap
+        with: "#registry"
+  - include: [ "README.md" ]
+    chain:
+    - type: ReplaceText
+      substitutions:
+      - text: java-func-accelerator
+        with: "#artifactId"
+  - include: [ "kubernetes/k8s/deployment.yaml", "kubernetes/k8s/service.yaml" ]
+    condition: "#deploymentType == 'local-k8s'"
+    chain:
+    - type: ReplaceText
+      substitutions:
+      - text: java-func-accelerator
+        with: "#artifactId"
+    - type: RewritePath
+      rewriteTo: "'kubernetes/' + #filename"
+  - include: [ "kubernetes/k8s/Tiltfile" ]
+    condition: "#deploymentType == 'local-k8s'"
+    chain:
+    - type: ReplaceText
+      substitutions:
+      - text: java-func-accelerator
+        with: "#artifactId"
+    - type: ReplaceText
+      substitutions:
+      - text: your-registry.io/tap
+        with: "#registry"
+    - type: RewritePath
+      rewriteTo: "#filename"
+
+    - include: [ "kubernetes/cnr/service.yaml" ]
+      condition: "#deploymentType == 'workload' and !#enableAppLiveView"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: java-func-accelerator
+          with: "#artifactId"
+      - type: RewritePath
+        rewriteTo: "'kubernetes/' + #filename"
+    - include: [ "kubernetes/cnr/service-alv.yaml" ]
+      condition: "#deploymentType == 'workload' and #enableAppLiveView"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: java-func-accelerator
+          with: "#artifactId"
+      - type: RewritePath
+        rewriteTo: "'kubernetes/service.yaml'"
+    - include: [ "kubernetes/cnr/application.properties" ]
+      condition: "#deploymentType == 'workload' and #enableAppLiveView"
+      chain:
+      - type: RewritePath
+        rewriteTo: "'src/main/resources/' + #filename"
+    - include: [ "kubernetes/cnr/skaffold.yaml" ]
+      condition: "#deploymentType == 'workload'"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: java-func-accelerator
+          with: "#artifactId"
+      - type: RewritePath
+        rewriteTo: "#filename"

@@ -22,7 +22,7 @@ build:
 deploy:
   kubectl:
     manifests:
-    - kubernetes/service.yaml
+    - service.yaml
 
 profiles:
 - name: native

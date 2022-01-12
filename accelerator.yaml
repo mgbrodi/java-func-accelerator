@@ -102,7 +102,7 @@ engine:
     condition: "#deploymentType == 'local-k8s'"
     chain:
     - type: RewritePath
-      rewriteTo: "'src/main/resources/' + #filename"
+      rewriteTo: "'java/src/main/resources/' + #filename"
   - include: [ "kubernetes/cnr/service.yaml" ]
     condition: "#deploymentType == 'workload' and !#enableAppLiveView"
     chain:

@@ -23,7 +23,7 @@ accelerator:
       text: TAP workload
     - value: local-k8s
       text: Kubernetes deployment and service
-    defaultValue: workload
+    defaultValue: local-k8s
     required: true
   - name: enableAppLiveView
     label: App Live View

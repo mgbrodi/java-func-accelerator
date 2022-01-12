@@ -11,5 +11,5 @@ pack(SOURCE_IMAGE + ':latest',
 )
 
 k8s_yaml(['kubernetes/deployment.yaml', 'kubernetes/service.yaml'])
-k8s_resource('stock-value', port_forwards=8080)
+k8s_resource('java-func-accelerator', port_forwards=8080)
 allow_k8s_contexts('arn:aws:eks:us-east-2:083459807443:cluster/tap')

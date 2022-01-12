@@ -16,12 +16,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: rapidapi-key-host
-                  key: host
+                  key: rapidapi.host
             - name: RAPIDAPI_KEY
               valueFrom:
                 secretKeyRef:
                   name: rapidapi-key-host
-                  key: key
+                  key: rapidapi.key
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness

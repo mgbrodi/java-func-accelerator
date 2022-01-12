@@ -52,7 +52,6 @@ engine:
       - text: java-func-accelerator
         with: "#artifactId"
   - include: [ "config/*.yaml" ]
-    condition: "#deploymentType == 'workload'"
     chain:
     - type: ReplaceText
       substitutions:
@@ -75,6 +74,10 @@ engine:
   - include: [ "kubernetes/k8s/deployment.yaml", "kubernetes/k8s/service.yaml" ]
     condition: "#deploymentType == 'local-k8s'"
     chain:
+    - type: ReplaceText
+      substitutions:
+      - text: your-registry.io/library
+        with: "#registry"
     - type: ReplaceText
       substitutions:
       - text: java-func-accelerator
@@ -100,6 +103,10 @@ engine:
       chain:
       - type: ReplaceText
         substitutions:
+        - text: your-registry.io/library
+          with: "#registry"
+      - type: ReplaceText
+        substitutions:
         - text: java-func-accelerator
           with: "#artifactId"
       - type: RewritePath
@@ -120,6 +127,10 @@ engine:
     - include: [ "kubernetes/cnr/service-alv.yaml" ]
       condition: "#deploymentType == 'workload' and #enableAppLiveView"
       chain:
+      - type: ReplaceText
+        substitutions:
+        - text: your-registry.io/library
+          with: "#registry"
       - type: ReplaceText
         substitutions:
         - text: java-func-accelerator

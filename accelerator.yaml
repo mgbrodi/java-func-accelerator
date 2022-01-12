@@ -25,6 +25,7 @@ accelerator:
       text: Kubernetes deployment and service
     defaultValue: local-k8s
     required: true
+
   - name: enableAppLiveView
     label: App Live View
     dependsOn:
@@ -116,7 +117,7 @@ engine:
     - type: RewritePath
       rewriteTo: "'kubernetes/' + #filename"
   - include: [ "kubernetes/cnr/Tiltfile" ]
-    condition: "#deploymentType == 'workload' and !#enableAppLiveView"
+    condition: "#deploymentType == 'workload'"
     chain:
     - type: ReplaceText
       substitutions:
@@ -141,21 +142,8 @@ engine:
         with: "#artifactId"
     - type: RewritePath
       rewriteTo: "'kubernetes/service.yaml'"
-  - include: [ "kubernetes/k8s/Tiltfile" ]
-    condition: "#deploymentType == 'workload' and #enableAppLiveView"
-    chain:
-    - type: ReplaceText
-      substitutions:
-      - text: java-func-accelerator
-        with: "#artifactId"
-    - type: ReplaceText
-      substitutions:
-      - text: your-registry.io/library
-        with: "#registry"
-    - type: RewritePath
-      rewriteTo: "#filename"
   - include: [ "kubernetes/cnr/application.properties" ]
-    condition: "#deploymentType == 'workload' and #enableAppLiveView"
+    condition: "#deploymentType == 'workload'"
     chain:
     - type: RewritePath
       rewriteTo: "'src/main/resources/' + #filename"

@@ -21,21 +21,9 @@ public class JavaFuncApplication {
     static String key;
 
 	@Bean
-	public Function<String, String> getStock() {
+	public Function<String, String> upperHello() {
 		return (in) -> {
-
-			HttpRequest request = HttpRequest.newBuilder()
-		.uri(URI.create("https://live-stock-market.p.rapidapi.com/yahoo-finance/v1/chart?symbol="+in+"&interval=1d&range=1mo"))
-		.header("x-rapidapi-host", host)
-		.header("x-rapidapi-key", key)
-		.method("GET", HttpRequest.BodyPublishers.noBody())
-		.build();
-		try {
-			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-			return response.body();
-		} catch (Exception e) {
-			return "Error: "+e.getMessage();
-		}
+			return "Hello "+in.toUpperCase();
 		};
 	}
 

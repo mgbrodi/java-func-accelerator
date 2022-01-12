@@ -33,7 +33,7 @@ accelerator:
     description: Toggle "On" to enable Application Live View integration.
     inputType: checkbox
     dataType: boolean
-    defaultValue: false
+    defaultValue: true
 
 engine:
   merge:
